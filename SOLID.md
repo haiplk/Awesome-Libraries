@@ -42,60 +42,35 @@ Principle: Objects of a superclass should be replaceable with objects of its sub
 
 
 ```csharp
-// Violate 
-
-// Superclass
-public class Shape
+// Bad
+public class Rectangle
 {
-    public virtual double Area()
-    {
-        return 0;
-    }
+    public virtual int Width { get; set; }
+    public virtual int Height { get; set; }
 }
 
-// Subclass
-public class Rectangle : Shape
+public class Square : Rectangle
 {
-    public double Width { get; set; }
-    public double Height { get; set; }
-
-    public override double Area()
+    public override int Width
     {
-        return Width * Height;
+        get => base.Width;
+        set
+        {
+            base.Width = value;
+            base.Height = value;
+        }
+    }
+
+    public override int Height
+    {
+        get => base.Height;
+        set
+        {
+            base.Width = value;
+            base.Height = value;
+        }
     }
 }
-
-// Another subclass
-public class Square : Shape
-{
-    public double SideLength { get; set; }
-
-    public override double Area()
-    {
-        return SideLength * SideLength;
-    }
-}
-
-class Program
-{
-    static void Main(string[] args)
-    {
-        // Using polymorphism
-        Shape shape1 = new Rectangle { Width = 5, Height = 4 };
-        Shape shape2 = new Square { SideLength = 5 };
-
-        // Violating Liskov Substitution Principle
-        shape2 = new Rectangle { Width = 5, Height = 4 }; // A square is not a rectangle!
-
-        // Calculating and printing areas
-        Console.WriteLine("Area of shape1 (Rectangle): " + shape1.Area());
-        Console.WriteLine("Area of shape2 (Square): " + shape2.Area());
-    }
-}
-
-```
-
-```csharp
 
 // Good
 public abstract class Shape
@@ -116,5 +91,98 @@ public class Square : Shape
     public int Side { get; set; }
 
     public override int Area() => Side * Side;
+}
+```
+
+### 4. Interface Segregation Principle (ISP)
+Principle: A client should not be forced to implement an interface that it doesn't use.
+
+```csharp
+// Bad
+public interface IWorker
+{
+    void Work();
+    void Eat();
+}
+
+public class Robot : IWorker
+{
+    public void Work() { /* work */ }
+    public void Eat() { /* do nothing */ }
+}
+
+// Good
+public interface IWorker
+{
+    void Work();
+}
+
+public interface IEater
+{
+    void Eat();
+}
+
+public class Robot : IWorker
+{
+    public void Work() { /* work */ }
+}
+
+public class Human : IWorker, IEater
+{
+    public void Work() { /* work */ }
+    public void Eat() { /* eat */ }
+}
+```
+
+
+### 5. Dependency Inversion Principle (DIP)
+Principle: High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details. Details should depend on abstractions.
+
+```csharp
+// Bad
+public class Worker
+{
+    private readonly Logger _logger;
+
+    public Worker()
+    {
+        _logger = new Logger();
+    }
+
+    public void DoWork()
+    {
+        _logger.Log("Working...");
+    }
+}
+
+public class Logger
+{
+    public void Log(string message) { /* log message */ }
+}
+
+// Good
+public interface ILogger
+{
+    void Log(string message);
+}
+
+public class Worker
+{
+    private readonly ILogger _logger;
+
+    public Worker(ILogger logger)
+    {
+        _logger = logger;
+    }
+
+    public void DoWork()
+    {
+        _logger.Log("Working...");
+    }
+}
+
+public class ConsoleLogger : ILogger
+{
+    public void Log(string message) => Console.WriteLine(message);
 }
 ```
