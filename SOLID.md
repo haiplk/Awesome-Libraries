@@ -43,7 +43,7 @@ Principle: Objects of a superclass should be replaceable with objects of its sub
 
 ```csharp
 // Violate 
-```
+
 // Superclass
 public class Shape
 {
@@ -92,6 +92,9 @@ class Program
         Console.WriteLine("Area of shape2 (Square): " + shape2.Area());
     }
 }
+
+```
+
 ```csharp
 
 // Good
