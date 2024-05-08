@@ -54,20 +54,3 @@ Keep classes small and focused, adhering to the Single Responsibility Principle 
 ### 10. Systems
 
 Design modular and decoupled systems. Favor composition over inheritance and strive for loose coupling.
-
-## Contribution Guidelines
-
-Contributions to this summary are welcome! Follow these steps to contribute:
-
-1. Fork the repository
-2. Create a new branch (`git checkout -b feature`)
-3. Make your changes
-4. Commit your changes (`git commit -am 'Add feature'`)
-5. Push to the branch (`git push origin feature`)
-6. Create a new Pull Request
-
-Please ensure that your contributions adhere to the principles outlined in "Clean Code."
-
-## License
-
-This summary is provided under the [MIT License](LICENSE).
