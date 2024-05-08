@@ -40,36 +40,59 @@ public class PercentageDiscountCalculator : IDiscountCalculator
 ### 3. Liskov Substitution Principle (LSP)
 Principle: Objects of a superclass should be replaceable with objects of its subclasses without affecting the correctness of the program.
 
+
 ```csharp
-// Bad
-public class Rectangle
+// Violate 
+```
+// Superclass
+public class Shape
 {
-    public virtual int Width { get; set; }
-    public virtual int Height { get; set; }
-}
-
-public class Square : Rectangle
-{
-    public override int Width
+    public virtual double Area()
     {
-        get => base.Width;
-        set
-        {
-            base.Width = value;
-            base.Height = value;
-        }
-    }
-
-    public override int Height
-    {
-        get => base.Height;
-        set
-        {
-            base.Width = value;
-            base.Height = value;
-        }
+        return 0;
     }
 }
+
+// Subclass
+public class Rectangle : Shape
+{
+    public double Width { get; set; }
+    public double Height { get; set; }
+
+    public override double Area()
+    {
+        return Width * Height;
+    }
+}
+
+// Another subclass
+public class Square : Shape
+{
+    public double SideLength { get; set; }
+
+    public override double Area()
+    {
+        return SideLength * SideLength;
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        // Using polymorphism
+        Shape shape1 = new Rectangle { Width = 5, Height = 4 };
+        Shape shape2 = new Square { SideLength = 5 };
+
+        // Violating Liskov Substitution Principle
+        shape2 = new Rectangle { Width = 5, Height = 4 }; // A square is not a rectangle!
+
+        // Calculating and printing areas
+        Console.WriteLine("Area of shape1 (Rectangle): " + shape1.Area());
+        Console.WriteLine("Area of shape2 (Square): " + shape2.Area());
+    }
+}
+```csharp
 
 // Good
 public abstract class Shape
